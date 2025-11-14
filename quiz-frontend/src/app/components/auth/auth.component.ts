@@ -61,12 +61,19 @@ export class AuthComponent implements OnInit {
 
   this.http.post(apiUrl + endpoint, this.form.value).subscribe({
     next: (res: any) => {
-      if (this.loginMode) {
-        alert(res.message || 'Login successful');
+        if (this.loginMode) {
+        const selectedRole = this.form.value.role;
+        const actualRole = res.user.role;
 
+        if (selectedRole !== actualRole) {
+            alert("Invalid credentials: Role mismatch!");
+            localStorage.removeItem('user'); // remove saved wrong login
+            return; // stop navigation
+          }
+        if (this.loginMode) {
+        alert(res.message || 'Login successful');
         // Save user info
         localStorage.setItem('user', JSON.stringify(res.user));
-
         // Redirect based on role
         if (res.user.role === 'Admin') {
           this.router.navigate(['/admin-dashboard']);
@@ -85,5 +92,6 @@ export class AuthComponent implements OnInit {
 }
 
 }
+
 
 
