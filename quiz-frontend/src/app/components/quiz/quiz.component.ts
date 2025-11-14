@@ -42,7 +42,7 @@ export class QuizComponent implements OnInit {
 
   // Fetch random questions for selected subject
   fetchQuestions() {
-    this.http.get<Question[]>(`http://localhost:5000/api/quiz/${this.subjectId}`).subscribe({
+    this.http.get<Question[]>(`https://quizmasterapplication.onrender.com/api/quiz/${this.subjectId}`).subscribe({
       next: (res) => {
         this.questions = res;
         if (this.questions.length > 0) {
@@ -145,3 +145,4 @@ goToQuestion(index: number) {
   this.selectedAnswer = this.userAnswers[index] || null; // ✅ Restore if already selected
 }
 }
+
