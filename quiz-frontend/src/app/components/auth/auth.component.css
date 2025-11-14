@@ -1,0 +1,121 @@
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(
+                rgba(0, 0, 0, 0.4), 
+                rgba(0, 0, 0, 0.4)
+              ),
+              url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1920&q=80')
+              center/cover no-repeat;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.auth-card {
+  width: 380px;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  animation: fadeIn 0.8s ease;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #222;
+  font-weight: 600;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+label {
+  margin-top: 0.75rem;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+input, select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 0.4rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: #3a57ff;
+  box-shadow: 0 0 5px rgba(58,87,255,0.4);
+}
+
+.btn.primary {
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, #3a57ff, #6f86ff);
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.btn.primary:hover {
+  background: linear-gradient(135deg, #3248e5, #5f76ff);
+}
+
+.switch {
+  text-align: center;
+  margin-top: 1rem;
+  color: #444;
+}
+
+.link {
+  color: #3a57ff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: #e63946;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+input.invalid {
+  border-color: #e63946;
+  background: #fff5f5;
+}
+
+button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 400px) {
+  .auth-card {
+    width: 90%;
+    padding: 1.5rem;
+  }
+}

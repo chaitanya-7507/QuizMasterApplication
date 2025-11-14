@@ -1,0 +1,207 @@
+<div class="admin-dashboard" [class.dark]="darkMode">
+  <div class="app-title">
+    <h1>🎓 Quiz Master</h1>
+  </div>
+
+  <!-- 🌟 Header -->
+  <header class="admin-header">
+    <h1>🧠 Admin Dashboard</h1>
+    <div class="header-actions">
+      <button class="theme-btn" (click)="toggleTheme()">
+        {{ darkMode ? '🌞 Light Mode' : '🌙 Dark Mode' }}
+      </button>
+      <button class="logout-btn" (click)="logout()">🚪 Logout</button>
+    </div>
+  </header>
+
+  <!-- ✅ Show Questions Page -->
+  <div *ngIf="showQuestionsPage; else dashboardView" class="questions-page">
+    <h2>📋 All Questions</h2>
+    <button class="btn back-btn" (click)="showQuestionsPage = false">⬅️ Back to Dashboard</button>
+
+    <div class="questions-list">
+      <ul>
+        <li *ngFor="let q of questions">
+          <div class="question-item">
+            <strong>Q:</strong> {{ q.questionText }} <em>({{ q.subject?.name }})</em>
+          </div>
+          <ul>
+            <li *ngFor="let key of ['a','b','c','d']">
+              <span [class.correct]="key === q.correctAnswer">
+                {{ key.toUpperCase() }}: {{ q.options[key] }}
+              </span>
+            </li>
+          </ul>
+          <div class="question-actions">
+            <button (click)="editQuestion(q)">✏️ Edit</button>
+            <button (click)="deleteQuestion(q._id)">🗑️ Delete</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 🌍 Dashboard Default View -->
+  <ng-template #dashboardView>
+    <!-- 📘 Manage Subjects -->
+    <section class="form-section">
+      <h2>📘 Manage Subjects</h2>
+      <form [formGroup]="subjectForm" (ngSubmit)="saveSubject()">
+        <input formControlName="name" placeholder="Subject Name" />
+        <input type="number" formControlName="timer" placeholder="Timer (minutes)" />
+        <button type="submit" class="btn">{{ editMode ? 'Update Subject' : 'Add Subject' }}</button>
+        <button type="button" class="btn cancel" *ngIf="editMode" (click)="resetSubjectForm()">Cancel</button>
+      </form>
+
+      <ul class="list">
+        <li *ngFor="let s of subjects">
+          <strong>{{ s.name }}</strong> ⏱️ {{ s.timer }} mins
+          <button (click)="editSubject(s)">✏️ Edit</button>
+          <button (click)="deleteSubject(s._id)">🗑️ Delete</button>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ❓ Manage Questions -->
+    <section class="form-section">
+      <h2>❓ Manage Questions</h2>
+
+      <!-- 📝 Question Form -->
+      <form [formGroup]="questionForm" (ngSubmit)="saveQuestion()">
+        <select formControlName="subject">
+          <option value="" disabled>Select Subject</option>
+          <option *ngFor="let s of subjects" [value]="s._id">{{ s.name }}</option>
+        </select>
+
+        <textarea formControlName="questionText" placeholder="Enter Question"></textarea>
+
+        <div formGroupName="options" class="options">
+          <input formControlName="a" placeholder="Option A" />
+          <input formControlName="b" placeholder="Option B" />
+          <input formControlName="c" placeholder="Option C" />
+          <input formControlName="d" placeholder="Option D" />
+        </div>
+
+        <input formControlName="correctAnswer" placeholder="Correct Option (a/b/c/d)" />
+
+        <div class="form-buttons">
+          <button type="submit" class="btn">
+            {{ selectedQuestionId ? 'Update Question' : 'Add Question' }}
+          </button>
+          <button type="button" class="btn cancel" *ngIf="selectedQuestionId" (click)="resetQuestionForm()">
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      <!-- 👇 Show/Hide Questions Button -->
+      <div class="show-btn-container">
+        <button class="btn show-btn" (click)="toggleQuestions()">
+          {{ showQuestions ? 'Hide Questions' : '📋 Show Questions' }}
+        </button>
+      </div>
+
+      <!-- 🌟 Compact Questions List (Visible only when showQuestions = true) -->
+      <div class="questions-list" *ngIf="showQuestions">
+        <h3>📋 All Questions</h3>
+
+        <div class="questions-container">
+          <div *ngFor="let q of questions" class="question-card">
+            <p class="q-text">
+              <strong>Q:</strong> {{ q.questionText }}
+              <em>({{ q.subject?.name }})</em>
+            </p>
+
+            <ul class="options-display">
+              <li *ngFor="let key of ['a', 'b', 'c', 'd']">
+                <span [class.correct]="key === q.correctAnswer">
+                  {{ key.toUpperCase() }}: {{ q.options[key] }}
+                </span>
+              </li>
+            </ul>
+
+            <div class="q-actions">
+              <button class="edit-btn" (click)="editQuestion(q)">✏️ Edit</button>
+              <button class="delete-btn" (click)="deleteQuestion(q._id)">🗑️ Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 📂 Subject Overview -->
+    <section class="form-section">
+      <h2>📂 Subjects Overview (Click to Expand)</h2>
+      <div class="subjects-container">
+        <div
+          class="subject-card"
+          *ngFor="let s of subjects"
+          (click)="onSelectSubject(s._id)"
+          [class.active]="selectedOverviewSubject === s._id"
+        >
+          <h3>{{ s.name }}</h3>
+          <p>⏱️ {{ s.timer }} mins</p>
+        </div>
+      </div>
+
+      <div *ngIf="selectedOverviewSubject" class="questions-overview">
+        <h3>📝 Questions for {{ subjectName }}</h3>
+        <div *ngFor="let q of getQuestionsForSelectedSubject()" class="question-card">
+          <p><strong>Q:</strong> {{ q.questionText }}</p>
+          <ul>
+            <li *ngFor="let key of ['a', 'b', 'c', 'd']">
+              <span [class.correct]="key === q.correctAnswer">
+                {{ key.toUpperCase() }}: {{ q.options[key] }}
+              </span>
+            </li>
+          </ul>
+          <button (click)="startEditingQuestion(q)">✏️ Quick Edit</button>
+          <button (click)="deleteQuestion(q._id)">🗑️ Delete</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 👥 Manage Users -->
+    <section class="form-section">
+      <h2>👥 Manage Users</h2>
+      <ul class="list users">
+        <li *ngFor="let u of users">
+          <span>{{ u.username }} ({{ u.role }})</span>
+          <button (click)="deleteUser(u._id)">🗑️ Delete</button>
+        </li>
+      </ul>
+    </section>
+  </ng-template>
+
+  <!-- ✅ Inline Question Editor Modal -->
+  <div class="modal-backdrop" *ngIf="isEditingQuestion">
+    <div class="modal">
+      <h3>✏️ Edit Question</h3>
+      <textarea [(ngModel)]="questionToEdit.questionText" placeholder="Edit question text"></textarea>
+
+      <div class="options-edit">
+        <label *ngFor="let key of ['a','b','c','d']">
+          {{ key.toUpperCase() }}:
+          <input [(ngModel)]="questionToEdit.options[key]" placeholder="Option {{ key.toUpperCase() }}" />
+        </label>
+      </div>
+
+      <label>
+        ✅ Correct Answer:
+        <input [(ngModel)]="questionToEdit.correctAnswer" placeholder="Correct option (a/b/c/d)" />
+      </label>
+
+      <div class="modal-actions">
+        <button (click)="updateQuestionInline()">💾 Save</button>
+        <button (click)="cancelEditingQuestion()">❌ Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⚙️ Footer -->
+  <footer class="admin-footer">
+    <p>© {{ currentYear }} Quiz Management System | Built with ❤️ for Admins</p>
+  </footer>
+</div>
+
+

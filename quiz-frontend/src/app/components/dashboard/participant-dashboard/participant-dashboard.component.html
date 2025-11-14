@@ -1,0 +1,56 @@
+<div class="participant-dashboard" [class.dark]="darkMode">
+  <div class="app-title">
+    <h1>🎓 Quiz Master</h1>
+    <!-- Or replace "Quiz Master" with your actual app name -->
+  </div>
+  <!-- Header -->
+  <header class="participant-header">
+    <h1>👋 Welcome, {{ participantName }}</h1>
+
+    <div class="header-actions">
+      <button class="theme-btn" (click)="toggleTheme()">
+       Theme {{ darkMode ? '🌞' : '🌙' }}
+      </button>
+
+      <div class="profile-container" (click)="toggleProfileMenu()">
+        <div class="profile-circle">{{ participantName[0] | uppercase }}</div>
+
+        <div class="profile-menu" *ngIf="showProfileMenu">
+          <p>{{ participantName }}</p>
+          <p class="email">{{ participantEmail }}</p>
+          <hr />
+          <button (click)="viewStats()">📊 My Stats</button>
+          <button (click)="logout()">🚪 Logout</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Subject Selection -->
+  <section class="subjects-section">
+    <h2>📘 Choose a Subject</h2>
+    <div class="subjects-container">
+      <div class="subject-card" *ngFor="let s of subjects">
+        <h3>{{ s.name }}</h3>
+        <p>⏱️ {{ s.timer }} mins</p>
+        <button class="start-btn" (click)="startQuiz(s)">▶️ Start Quiz</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Popup -->
+  <div class="stats-popup" *ngIf="showStats">
+    <div class="stats-content">
+      <h3>📊 My Stats</h3>
+      <p><strong>Total Quizzes:</strong> {{ stats.totalQuizzes }}</p>
+      <p><strong>Average Score:</strong> {{ stats.averageScore }}%</p>
+      <p><strong>Highest Score:</strong> {{ stats.highestScore }}%</p>
+      <button (click)="closeStats()">Close</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="participant-footer">
+    <p>© {{ currentYear }} QuizMaster | Built with ❤️ for learners</p>
+  </footer>
+</div>
