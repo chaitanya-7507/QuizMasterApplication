@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 interface Question {
   _id: string;
   questionText: string;
-  options: { [key: string]: string }; // example: { a: 'Option A', b: 'Option B' }
+  options: { [key: string]: string }; 
   correctAnswer: string;
 }
 
@@ -28,6 +28,7 @@ export class QuizComponent implements OnInit {
 
   // Track selected answers
   answers: { [questionId: string]: string | null } = {};
+  userAnswers: { [key: number]: string } = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -40,30 +41,52 @@ export class QuizComponent implements OnInit {
     this.fetchQuestions();
   }
 
-  // Fetch random questions for selected subject
-  fetchQuestions() {
-    this.http.get<Question[]>(`https://quizmasterapplication.onrender.com/api/quiz/${this.subjectId}`).subscribe({
-      next: (res) => {
-        this.questions = res;
-        if (this.questions.length > 0) {
-          this.selectedAnswer = this.answers[this.questions[0]._id] || null;
-        }
-      },
-      error: (err) => {
-        console.error('❌ Error fetching questions:', err);
-        alert('No questions found for this subject.');
-      }
-    });
+  // 🔀 Shuffle helper
+  shuffleArray(array: any[]) {
+    return array.sort(() => Math.random() - 0.5);
   }
 
-  // When user selects an answer
-  /*selectAnswer(optionKey: string) {
-    const currentQuestion = this.questions[this.currentQuestionIndex];
-    this.answers[currentQuestion._id] = optionKey;
-    this.selectedAnswer = optionKey;
-  }*/
+  // Fetch and shuffle options
+  fetchQuestions() {
+    this.http.get<Question[]>(`https://quizmasterapplication.onrender.com/api/quiz/${this.subjectId}`)
+      .subscribe({
+        next: (res) => {
+          // 🔀 Shuffle options for each question
+          this.questions = res.map((q) => {
+            const entries = Object.entries(q.options);   // convert {a:'',b:''} → [['a',''],['b','']]
+            const shuffled = this.shuffleArray(entries); // shuffle pairs
+      
+            const shuffledOptions: any = {};
+            shuffled.forEach(([key, value]) => {
+              shuffledOptions[key] = value;
+            });
 
-  // Move to next question
+            return {
+              ...q,
+              options: shuffledOptions
+            };
+          });
+
+          if (this.questions.length > 0) {
+            this.selectedAnswer = this.answers[this.questions[0]._id] || null;
+          }
+        },
+        error: (err) => {
+          console.error('❌ Error fetching questions:', err);
+          alert('No questions found for this subject.');
+        }
+      });
+  }
+
+  selectAnswer(optionKey: string) {
+    this.selectedAnswer = optionKey;
+
+    const currentQuestion = this.questions[this.currentQuestionIndex];
+
+    this.userAnswers[this.currentQuestionIndex] = optionKey;
+    this.answers[currentQuestion._id] = optionKey;
+  }
+
   nextQuestion() {
     if (this.currentQuestionIndex < this.questions.length - 1) {
       this.currentQuestionIndex++;
@@ -74,7 +97,6 @@ export class QuizComponent implements OnInit {
     }
   }
 
-  // Move to previous question
   previousQuestion() {
     if (this.currentQuestionIndex > 0) {
       this.currentQuestionIndex--;
@@ -83,14 +105,12 @@ export class QuizComponent implements OnInit {
     }
   }
 
-  // Quiz completion logic
   finishQuiz() {
     this.quizCompleted = true;
 
-    // Calculate score
-    this.score = this.questions.reduce((acc, q) => {
-      return acc + (this.answers[q._id] === q.correctAnswer ? 1 : 0);
-    }, 0);
+    this.score = this.questions.reduce((acc, q) =>
+      acc + (this.answers[q._id] === q.correctAnswer ? 1 : 0), 0
+    );
 
     const result = {
       subjectId: this.subjectId,
@@ -102,7 +122,6 @@ export class QuizComponent implements OnInit {
     console.log('✅ Quiz finished:', result);
   }
 
-  // Restart quiz
   restartQuiz() {
     this.currentQuestionIndex = 0;
     this.score = 0;
@@ -111,38 +130,16 @@ export class QuizComponent implements OnInit {
     this.answers = {};
   }
 
-  // Navigate directly to a question from status tracker
-  /*goToQuestion(index: number) {
-    this.currentQuestionIndex = index;
-    const question = this.questions[index];
-    this.selectedAnswer = this.answers[question._id] || null;
-  }*/
-
-  // Navigate back to participant dashboard
-  backToDashboard() {
-    this.router.navigate(['/participant-dashboard']);
-  }
-
-  // Helper: Check if a question has been attempted
   isAttempted(qId: string): boolean {
     return !!this.answers[qId];
   }
-  userAnswers: { [key: number]: string } = {};
 
-selectAnswer(optionKey: string) {
-  this.selectedAnswer = optionKey;
+  goToQuestion(index: number) {
+    this.currentQuestionIndex = index;
+    this.selectedAnswer = this.userAnswers[index] || null;
+  }
 
-  const currentQuestion = this.questions[this.currentQuestionIndex];
-  
-  // ✅ Save to both tracking objects
-  this.userAnswers[this.currentQuestionIndex] = optionKey;
-  this.answers[currentQuestion._id] = optionKey;
+  backToDashboard() {
+    this.router.navigate(['/participant-dashboard']);
+  }
 }
-
-
-goToQuestion(index: number) {
-  this.currentQuestionIndex = index;
-  this.selectedAnswer = this.userAnswers[index] || null; // ✅ Restore if already selected
-}
-}
-
