@@ -69,21 +69,21 @@ export class AdminDashboardComponent implements OnInit {
 
   // Load all subjects
   loadSubjects() {
-    this.http.get('http://localhost:5000/api/subjects').subscribe((res: any) => {
+    this.http.get('https://quizmasterapplication.onrender.com/api/subjects').subscribe((res: any) => {
       this.subjects = res;
     });
   }
 
   // Load all users
   loadUsers() {
-    this.http.get('http://localhost:5000/api/users').subscribe((res: any) => {
+    this.http.get('https://quizmasterapplication.onrender.com/api/users').subscribe((res: any) => {
       this.users = res;
     });
   }
 
   // Load all questions
   loadQuestions() {
-    this.http.get('http://localhost:5000/api/questions').subscribe((res: any) => {
+    this.http.get('https://quizmasterapplication.onrender.com/api/questions').subscribe((res: any) => {
       this.questions = res;
     });
   }
@@ -94,7 +94,7 @@ export class AdminDashboardComponent implements OnInit {
     const data = this.subjectForm.value;
 
     if (this.editMode && this.selectedSubjectId) {
-      this.http.put(`http://localhost:5000/api/subjects/${this.selectedSubjectId}`, data).subscribe({
+      this.http.put(`https://quizmasterapplication.onrender.com/api/subjects/${this.selectedSubjectId}`, data).subscribe({
         next: () => {
           alert('✅ Subject updated!');
           this.resetSubjectForm();
@@ -103,7 +103,7 @@ export class AdminDashboardComponent implements OnInit {
         error: err => console.error(err)
       });
     } else {
-      this.http.post('http://localhost:5000/api/subjects', data).subscribe({
+      this.http.post('https://quizmasterapplication.onrender.com/api/subjects', data).subscribe({
         next: () => {
           alert('✅ Subject added!');
           this.resetSubjectForm();
@@ -128,7 +128,7 @@ export class AdminDashboardComponent implements OnInit {
 
   deleteSubject(id: string) {
     if (!confirm('Delete this subject?')) return;
-    this.http.delete(`http://localhost:5000/api/subjects/${id}`).subscribe(() => {
+    this.http.delete(`https://quizmasterapplication.onrender.com/api/subjects/${id}`).subscribe(() => {
       alert('🗑️ Subject deleted');
       this.loadSubjects();
     });
@@ -140,7 +140,7 @@ export class AdminDashboardComponent implements OnInit {
     const data = this.questionForm.value;
 
     if (this.selectedQuestionId) {
-      this.http.put(`http://localhost:5000/api/questions/${this.selectedQuestionId}`, data).subscribe({
+      this.http.put(`https://quizmasterapplication.onrender.com/api/questions/${this.selectedQuestionId}`, data).subscribe({
         next: () => {
           alert('✅ Question updated!');
           this.resetQuestionForm();
@@ -149,7 +149,7 @@ export class AdminDashboardComponent implements OnInit {
         error: err => console.error(err)
       });
     } else {
-      this.http.post('http://localhost:5000/api/questions', data).subscribe({
+      this.http.post('https://quizmasterapplication.onrender.com/api/questions', data).subscribe({
         next: () => {
           alert('✅ Question added!');
           this.resetQuestionForm();
@@ -177,7 +177,7 @@ export class AdminDashboardComponent implements OnInit {
 
   deleteQuestion(id: string) {
     if (!confirm('Delete this question?')) return;
-    this.http.delete(`http://localhost:5000/api/questions/${id}`).subscribe(() => {
+    this.http.delete(`https://quizmasterapplication.onrender.com/api/questions/${id}`).subscribe(() => {
       alert('🗑️ Question deleted');
       this.loadQuestions();
     });
@@ -198,7 +198,7 @@ export class AdminDashboardComponent implements OnInit {
   // Delete user
   deleteUser(id: string) {
     if (!confirm('Delete this user?')) return;
-    this.http.delete(`http://localhost:5000/api/users/${id}`).subscribe(() => {
+    this.http.delete(`https://quizmasterapplication.onrender.com/api/users/${id}`).subscribe(() => {
       alert('🗑️ User deleted');
       this.loadUsers();
     });
@@ -231,7 +231,7 @@ export class AdminDashboardComponent implements OnInit {
   updateQuestionInline() {
     if (!this.questionToEdit || !this.questionToEdit._id) return;
 
-    this.http.put(`http://localhost:5000/api/questions/${this.questionToEdit._id}`, this.questionToEdit).subscribe({
+    this.http.put(`https://quizmasterapplication.onrender.com/api/questions/${this.questionToEdit._id}`, this.questionToEdit).subscribe({
       next: () => {
         alert('✅ Question updated successfully!');
         this.isEditingQuestion = false;
