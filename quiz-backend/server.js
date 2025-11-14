@@ -2,8 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
 
 import authRoutes from "./routes/authRoutes.js";
 import subjectRoutes from "./routes/subjectRoutes.js";
@@ -11,7 +9,6 @@ import questionRoutes from "./routes/questionRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import resultRoutes from "./routes/resultRoutes.js";
-
 dotenv.config();
 const app = express();
 
@@ -33,20 +30,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/results", resultRoutes);
 
-// ✅ Serve Angular frontend
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const frontendPath = path.join(__dirname, "public");
-app.use(express.static(frontendPath));
-
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
-});
-
-
 // ✅ Health Check
-app.get("/health", (req, res) => res.send("Quiz App Backend Running 🚀"));
+app.get("/", (req, res) => res.send("Quiz App Backend Running 🚀"));
 
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
