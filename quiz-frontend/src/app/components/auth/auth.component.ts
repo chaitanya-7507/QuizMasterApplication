@@ -56,7 +56,7 @@ export class AuthComponent implements OnInit {
  onSubmit() {
   if (this.form.invalid) return;
 
-  const apiUrl = 'http://https://quizmasterapplication.onrender.com/api/auth';
+  const apiUrl = 'https://quizmasterapplication.onrender.com/api/auth';
   const endpoint = this.loginMode ? '/login' : '/signup';
 
   this.http.post(apiUrl + endpoint, this.form.value).subscribe({
@@ -85,4 +85,5 @@ export class AuthComponent implements OnInit {
 }
 
 }
+
 
