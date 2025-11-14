@@ -62,6 +62,8 @@ The system includes **JWT Authentication**, **Role-Based Access**, and a clean U
 # © Copyright
 © 2025 QuizMaster Application — All Rights Reserved.
 
+---
+
 # 📄 License
 This project is licensed under the [MIT License](./LICENSE).
 You are free to use, modify, and distribute the code with attribution.
