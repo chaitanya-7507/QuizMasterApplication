@@ -53,45 +53,38 @@ export class AuthComponent implements OnInit {
     this.router.navigate([this.loginMode ? '/signup' : '/login']);
   }
 
- onSubmit() {
-  if (this.form.invalid) return;
+  onSubmit() {
+    if (this.form.invalid) return;
 
-  const apiUrl = 'https://quizmasterapplication.onrender.com/api/auth';
-  const endpoint = this.loginMode ? '/login' : '/signup';
+    const apiUrl = 'https://quizmasterapplication.onrender.com/api/auth';
+    const endpoint = this.loginMode ? '/login' : '/signup';
 
-  this.http.post(apiUrl + endpoint, this.form.value).subscribe({
-    next: (res: any) => {
+    this.http.post(apiUrl + endpoint, this.form.value).subscribe({
+      next: (res: any) => {
         if (this.loginMode) {
-        const selectedRole = this.form.value.role;
-        const actualRole = res.user.role;
+          const selectedRole = this.form.value.role;
+          const actualRole = res.user.role;
 
-        if (selectedRole !== actualRole) {
+          if (selectedRole !== actualRole) {
             alert("Invalid credentials: Role mismatch!");
-            localStorage.removeItem('user'); // remove saved wrong login
-            return; // stop navigation
+            localStorage.removeItem('user');
+            return;
           }
-        if (this.loginMode) {
-        alert(res.message || 'Login successful');
-        // Save user info
-        localStorage.setItem('user', JSON.stringify(res.user));
-        // Redirect based on role
-        if (res.user.role === 'Admin') {
-          this.router.navigate(['/admin-dashboard']);
-        } else if (res.user.role === 'Participant') {
-          this.router.navigate(['/participant-dashboard']);
+          alert(res.message || 'Login successful');
+          localStorage.setItem('user', JSON.stringify(res.user));
+          if (res.user.role === 'Admin') {
+            this.router.navigate(['/admin-dashboard']);
+          } else if (res.user.role === 'Participant') {
+            this.router.navigate(['/participant-dashboard']);
+          }
+        } else {
+          alert(res.message || 'Signup successful');
+          this.router.navigate(['/login']);
         }
-      } else {
-        alert(res.message || 'Signup successful');
-        this.router.navigate(['/login']);
+      },
+      error: (err: any) => {
+        alert(err.error?.message || 'Something went wrong!');
       }
-    },
-    error: (err) => {
-      alert(err.error?.message || 'Something went wrong!');
-    }
-  });
+    });
+  }
 }
-
-}
-
-
-
