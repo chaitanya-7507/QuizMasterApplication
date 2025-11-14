@@ -3,9 +3,8 @@ import { AuthComponent } from './components/auth/auth.component';
 import { AdminDashboardComponent } from './components/dashboard/admin-dashboard/admin-dashboard.component';
 import { ParticipantDashboardComponent } from './components/dashboard/participant-dashboard/participant-dashboard.component';
 import { QuizComponent } from './components/quiz/quiz.component';
-
 export const routes: Routes = [
-  { path: '', component: AuthComponent }, // ← FIXED
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: AuthComponent },
   { path: 'signup', component: AuthComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent },
