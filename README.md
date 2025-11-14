@@ -11,7 +11,7 @@ The system includes **JWT Authentication**, **Role-Based Access**, and a clean U
 
 | Layer | Technology | Description |
 |------|------------|-------------|
-| **Frontend** | Angular 17 | User interface & routing |
+| **Frontend** | Angular 19.2.3 | User interface & routing |
 | **Backend** | Node.js, Express.js | REST APIs & authentication |
 | **Database** | MongoDB, Mongoose | Store users, quizzes, questions |
 | **Auth** | JWT | Secure login & role validation |
