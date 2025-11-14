@@ -23,7 +23,7 @@ The system includes **JWT Authentication**, **Role-Based Access**, and a clean U
 
 ## 📁 Project Directory Structure
 
-QuizMasterApplication/
+```QuizMasterApplication/
 │
 ├── quiz-backend/
 │ ├── models/
@@ -57,4 +57,5 @@ QuizMasterApplication/
 │ └── README.md
 │
 ├── LICENSE
-└── README.md
+└── README.md```
+
