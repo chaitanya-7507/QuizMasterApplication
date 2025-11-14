@@ -13,8 +13,13 @@ dotenv.config();
 const app = express();
 
 // ✅ Middleware
+
+app.use(cors({
+  origin: "https://quizmasterapplication-07.onrender.com",
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true
+}));
 app.use(express.json());
-app.use(cors());
 
 // ✅ MongoDB Connection
 mongoose
@@ -36,3 +41,4 @@ app.get("/", (req, res) => res.send("Quiz App Backend Running 🚀"));
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
