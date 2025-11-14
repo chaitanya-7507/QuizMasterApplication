@@ -23,3 +23,38 @@ The system includes **JWT Authentication**, **Role-Based Access**, and a clean U
 
 ## 📁 Project Directory Structure
 
+QuizMasterApplication/
+│
+├── quiz-backend/
+│ ├── models/
+│ ├── routes/
+│ ├── package-lock.json
+│ ├── package.json
+│ └── server.js
+│
+├── quiz-frontend/
+│ └── src/
+│ └── app/
+│ ├── components/
+│ │ ├── auth/
+│ │ ├── dashboard/
+│ │ │ ├── admin-dashboard/
+│ │ │ └── participant-dashboard/
+│ │ └── quiz/
+│ ├── app-routing.module.ts
+│ ├── app.component.css
+│ ├── app.component.html
+│ ├── app.component.spec.ts
+│ ├── app.component.ts
+│ ├── app.module.ts
+│ ├── app.routes.ts
+│ ├── index.html
+│ ├── main.ts
+│ ├── styles.css
+│ ├── angular.json
+│ ├── package-lock.json
+│ ├── package.json
+│ └── README.md
+│
+├── LICENSE
+└── README.md
