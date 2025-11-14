@@ -51,7 +51,7 @@ export class ParticipantDashboardComponent implements OnInit {
   }
 
   loadSubjects() {
-    this.http.get('http://localhost:5000/api/subjects').subscribe((res: any) => {
+    this.http.get('https://quizmasterapplication.onrender.com/api/subjects').subscribe((res: any) => {
       this.subjects = res;
     });
   }
@@ -63,7 +63,7 @@ export class ParticipantDashboardComponent implements OnInit {
 
   loadStats() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.http.get(`http://localhost:5000/api/stats/${user._id}`).subscribe({
+    this.http.get(`https://quizmasterapplication.onrender.com/api/stats/${user._id}`).subscribe({
       next: (res: any) => (this.stats = res),
       error: () => {
         this.stats = { totalQuizzes: 0, averageScore: 0, highestScore: 0 };
@@ -80,3 +80,4 @@ export class ParticipantDashboardComponent implements OnInit {
     this.showStats = false;
   }
 }
+
